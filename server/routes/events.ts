@@ -17,6 +17,8 @@ router.get('/add/:day', async (req, res) => {
 
   // TODO: Replace this with all of the locations in the database
 
+  const locations = await db.getAllLocations()
+
   const viewData = { locations, days, day }
   res.render('addEvent', viewData)
 })
