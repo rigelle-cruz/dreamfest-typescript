@@ -52,3 +52,7 @@ export async function addNewEvent(event: Event) {
   }
   return db('events').insert(newEvent)
 }
+
+export async function deleteEvent(id: number) {
+  return db('events').where('id', id).del()
+}

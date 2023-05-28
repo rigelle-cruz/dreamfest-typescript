@@ -39,13 +39,11 @@ router.post('/add', async (req, res) => {
 })
 
 // POST /events/delete
-router.post('/delete', (req, res) => {
-  // const id = Number(req.body.id)
-  // const day = validateDay(req.body.day)
+router.post('/delete', async (req, res) => {
+  const id = Number(req.body.id)
+  const day = validateDay(req.body.day)
 
-  // TODO: Delete the event from the database using its id
-
-  const day = 'friday' // TODO: Remove this line
+  await db.deleteEvent(id)
 
   res.redirect(`/schedule/${day}`)
 })
