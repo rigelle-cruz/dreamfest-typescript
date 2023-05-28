@@ -24,10 +24,14 @@ router.get('/add/:day', async (req, res) => {
 })
 
 // POST /events/add
-router.post('/add', (req, res) => {
+router.post('/add', async (req, res) => {
   // ASSISTANCE: So you know what's being posted ;)
   // const { name, description, time, locationId } = req.body
-  // const day = validateDay(req.body.day)
+  const day = validateDay(req.body.day)
+
+  const event = { ...req.body }
+
+  await db.addNewEvent(event)
 
   // TODO: Add the event to the database and then redirect
 

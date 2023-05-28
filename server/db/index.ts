@@ -41,3 +41,14 @@ export async function getLocationById(id: number) {
 export async function updateLocation(updatedLocation: Location) {
   return db('locations').update(updatedLocation).where('id', updatedLocation.id)
 }
+
+export async function addNewEvent(event: Event) {
+  const newEvent = {
+    location_id: event.locationId,
+    day: event.day,
+    time: event.time,
+    name: event.name,
+    description: event.description,
+  }
+  return db('events').insert(newEvent)
+}
