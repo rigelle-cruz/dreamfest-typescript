@@ -14,15 +14,15 @@ export async function getAllLocations() {
 }
 
 export async function getEventsByDay(day: string) {
-  return db('events')
-    .join('locations', 'locations.id', 'events.location_id')
+  return db('locations')
+    .join('events', 'locations.id', 'events.location_id')
     .select(
-      'events.day as day',
       'events.name as eventName',
       'locations.name as locationName',
-      'events.time as time',
       'events.description as description',
-      'events.location_id as id'
+      'time',
+      'day',
+      'events.id as id'
     )
     .where('events.day', day)
 }
@@ -39,7 +39,5 @@ export async function getLocationById(id: number) {
 }
 
 export async function updateLocation(updatedLocation: Location) {
-  return db('locations')
-    .where('locations.id', updatedLocation.id)
-    .update(updatedLocation)
+  return db('locations').update(updatedLocation).where('id', updatedLocation.id)
 }
