@@ -49,31 +49,26 @@ router.post('/delete', async (req, res) => {
 })
 
 // GET /events/3/edit
-router.get('/:id/edit', (req, res) => {
+router.get('/:id/edit', async (req, res) => {
   const id = Number(req.params.id)
 
   // TODO: Replace event below with the event from the database using its id
   // NOTE: It should have the same shape as this one
-  const event = {
-    id: id,
-    locationId: 1,
-    day: 'friday',
-    time: '2pm - 3pm',
-    name: 'Slushie Apocalypse I',
-    description:
-      'This is totally a description of this really awesome event that will be taking place during this festival at the Yella Yurt. Be sure to not miss the free slushies cause they are rad!',
-  }
+  const event = await db.getEventsById(id)
 
   // TODO: Replace locations below with all of the locations from the database
   // NOTE: The objects should have the same shape as these.
   // The selected property should have a value of
   // either 'selected' or '' based on event.locationId above.
-  const locations = [
-    { id: 1, name: 'TangleStage', selected: '' },
-    { id: 2, name: 'Yella Yurt', selected: 'selected' },
-    { id: 3, name: 'Puffy Paddock', selected: '' },
-    { id: 4, name: 'Kombucha Karavan', selected: '' },
-  ]
+  const locations = await db.getAllLocations()
+
+  locations.map((element) => {
+    if (element.id === event.location_id) {
+      return { ...element, selected: 'selected' }
+    } else {
+      return { ...element, selected: '' }
+    }
+  })
 
   // This is done for you
   const days = eventDays.map((eventDay) => ({
@@ -87,16 +82,25 @@ router.get('/:id/edit', (req, res) => {
 })
 
 // POST /events/edit
-router.post('/edit', (req, res) => {
+router.post('/edit', async (req, res) => {
   // ASSISTANCE: So you know what's being posted ;)
-  // const { name, description, time } = req.body
-  // const id = Number(req.body.id)
-  // const day = validateDay(req.body.day)
-  // const locationId = Number(req.body.locationId)
+  const { name, description, time } = req.body
+  const id = Number(req.body.id)
+  const day = validateDay(req.body.day)
+  const locationId = Number(req.body.locationId)
 
   // TODO: Update the event in the database using the identifiers created above
 
-  const day = 'friday' // TODO: Remove this line
+  const updatedEvent = {
+    name,
+    description,
+    time,
+    id,
+    day,
+    location_id: locationId,
+  }
+
+  await db.updateEvent(updatedEvent)
 
   res.redirect(`/schedule/${day}`)
 })

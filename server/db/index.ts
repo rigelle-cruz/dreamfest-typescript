@@ -56,3 +56,11 @@ export async function addNewEvent(event: Event) {
 export async function deleteEvent(id: number) {
   return db('events').where('id', id).del()
 }
+
+export async function getEventsById(id: number) {
+  return db('events').select().where('id', id).first()
+}
+
+export async function updateEvent(updatedEvent: Event) {
+  return db('events').update(updatedEvent).where('id', updatedEvent.id)
+}
