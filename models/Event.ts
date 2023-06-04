@@ -1,5 +1,5 @@
 export interface EventData {
-  locationId: number
+  location_id: number
   day: string
   time: string
   name: string

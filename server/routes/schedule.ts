@@ -8,21 +8,14 @@ const router = express.Router()
 // GET /schedule/friday
 router.get('/:day', async (req, res) => {
   const day = validateDay(req.params.day)
+  const events = await db.getEventsByDay(day)
 
-  try {
-    const events = await db.getEventsByDay(day)
-
-    const viewData = {
-      day,
-      events,
-    }
-
-    res.render('showDay', viewData)
-  } catch (error) {
-    if (error instanceof Error) {
-      console.error(error.message)
-    }
+  const viewData = {
+    day,
+    events,
   }
+
+  res.render('showDay', viewData)
 })
 
 export default router

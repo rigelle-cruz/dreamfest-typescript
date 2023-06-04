@@ -10,7 +10,11 @@ const config = knexFile[environment]
 const db = knex(config)
 
 export async function getAllLocations() {
-  return db('locations').select()
+  return db('locations').select(
+    'locations.name as name',
+    'locations.description as description',
+    'locations.id as id'
+  )
 }
 
 export async function getEventsByDay(day: string) {
@@ -31,11 +35,7 @@ export async function getLocationById(id: number) {
   return db('locations')
     .where('locations.id', id)
     .first()
-    .select(
-      'locations.name as name',
-      'locations.id as id',
-      'locations.description as description'
-    )
+    .select('name', 'id', 'description')
 }
 
 export async function updateLocation(updatedLocation: Location) {
@@ -44,7 +44,7 @@ export async function updateLocation(updatedLocation: Location) {
 
 export async function addNewEvent(event: Event) {
   const newEvent = {
-    location_id: event.locationId,
+    location_id: event.location_id,
     day: event.day,
     time: event.time,
     name: event.name,
@@ -58,7 +58,10 @@ export async function deleteEvent(id: number) {
 }
 
 export async function getEventsById(id: number) {
-  return db('events').select().where('id', id).first()
+  return db('events')
+    .select('name', 'id', 'description', 'time', 'day')
+    .where('id', id)
+    .first()
 }
 
 export async function updateEvent(updatedEvent: Event) {

@@ -15,8 +15,6 @@ router.get('/add/:day', async (req, res) => {
     selected: eventDay === day ? 'selected' : '',
   }))
 
-  // TODO: Replace this with all of the locations in the database
-
   const locations = await db.getAllLocations()
 
   const viewData = { locations, days, day }
@@ -25,15 +23,11 @@ router.get('/add/:day', async (req, res) => {
 
 // POST /events/add
 router.post('/add', async (req, res) => {
-  // ASSISTANCE: So you know what's being posted ;)
-  // const { name, description, time, locationId } = req.body
   const day = validateDay(req.body.day)
 
   const event = { ...req.body }
 
   await db.addNewEvent(event)
-
-  // TODO: Add the event to the database and then redirect
 
   res.redirect(`/schedule/${day}`)
 })
@@ -52,14 +46,8 @@ router.post('/delete', async (req, res) => {
 router.get('/:id/edit', async (req, res) => {
   const id = Number(req.params.id)
 
-  // TODO: Replace event below with the event from the database using its id
-  // NOTE: It should have the same shape as this one
   const event = await db.getEventsById(id)
 
-  // TODO: Replace locations below with all of the locations from the database
-  // NOTE: The objects should have the same shape as these.
-  // The selected property should have a value of
-  // either 'selected' or '' based on event.locationId above.
   const locations = await db.getAllLocations()
 
   locations.map((element) => {
@@ -70,7 +58,6 @@ router.get('/:id/edit', async (req, res) => {
     }
   })
 
-  // This is done for you
   const days = eventDays.map((eventDay) => ({
     value: eventDay,
     name: capitalise(eventDay),
@@ -83,13 +70,10 @@ router.get('/:id/edit', async (req, res) => {
 
 // POST /events/edit
 router.post('/edit', async (req, res) => {
-  // ASSISTANCE: So you know what's being posted ;)
   const { name, description, time } = req.body
   const id = Number(req.body.id)
   const day = validateDay(req.body.day)
   const locationId = Number(req.body.locationId)
-
-  // TODO: Update the event in the database using the identifiers created above
 
   const updatedEvent = {
     name,
